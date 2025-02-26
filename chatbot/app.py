@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 import requests
 from linebot import LineBotApi, WebhookHandler
