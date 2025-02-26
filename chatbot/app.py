@@ -13,7 +13,7 @@ LINE_SECRET = "7feba977d46a33dd29b6915e540a4905"
 
 app = Flask(__name__)
 CORS(app)  # 允許所有跨域請求
-@app.route("/")
+@app.route("/", methods=["GET", "HEAD"])
 def home():
     return jsonify({"message": "Hello, this is your chatbot API!"})
 
