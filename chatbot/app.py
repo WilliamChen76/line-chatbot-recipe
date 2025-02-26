@@ -23,15 +23,37 @@ handler = WebhookHandler(LINE_SECRET)
 API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3"
 HEADERS = {"Authorization": f"Bearer {HF_API_KEY}"}
 
-def query_huggingface(prompt):
-    """向 Hugging Face API 發送請求"""
-    response = requests.post(API_URL, headers=HEADERS, json={"inputs": prompt})
+def query_huggingface(prompt, max_retries=5):
+    """向 Hugging Face API 發送請求，並加入重試機制"""
+    
+    for attempt in range(max_retries):
+        response = requests.post(API_URL, headers=HEADERS, json={"inputs": prompt})
+        
+        # 如果請求成功 (200)，返回生成的文字
+        if response.status_code == 200:
+            result = response.json()
+            
+            # 確保 response 格式正確
+            if isinstance(result, list) and "generated_text" in result[0]:
+                return result[0]["generated_text"]
+            else:
+                return "Error: Unexpected API response format"
+        
+        # 如果模型超載，等待 10 秒再試
+        elif response.status_code == 503 or ("error" in response.json() and response.json()["error_type"] == "overloaded"):
+            print(f"[Retry {attempt+1}/{max_retries}] Model is overloaded. Retrying in 10 seconds...")
+            time.sleep(10)
+        
+        # 其他錯誤（如 500, 429），等待 5 秒再試
+        else:
+            print(f"[Retry {attempt+1}/{max_retries}] Error {response.status_code}: {response.text}. Retrying in 5 seconds...")
+            time.sleep(5)
+    
+    return "Sorry, the AI is currently unavailable. Please try again later."
 
-    if response.status_code != 200:
-        print(f"Error {response.status_code}: {response.text}")  # Debug
-        return "Sorry, the AI is currently unavailable. Please try again later."
+# 測試
+print(query_huggingface("Give me a simple recipe"))
 
-    return response.json()[0]["generated_text"]
 
 @app.route("/callback", methods=["POST"])
 def callback():
