@@ -21,7 +21,7 @@ line_bot_api = LineBotApi(LINE_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_SECRET)
 
 # Hugging Face API 設定
-API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3"
+API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
 HEADERS = {"Authorization": f"Bearer {HF_API_KEY}"}
 
 def query_huggingface(prompt, max_retries=5):
