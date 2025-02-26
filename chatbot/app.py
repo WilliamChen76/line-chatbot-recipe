@@ -56,4 +56,5 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=llm_reply))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))  # 讀取 Render 設定的 PORT
+    app.run(host="0.0.0.0", port=port)
