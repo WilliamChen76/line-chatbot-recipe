@@ -1,4 +1,5 @@
 from flask import Flask, request, abort
+from flask_cors import CORS
 import requests
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
@@ -14,7 +15,7 @@ app = Flask(__name__)
 CORS(app)  # 允許所有跨域請求
 @app.route("/")
 def home():
-    return "AI Recipe Chatbot is running!", 200  # 回應 200 OK，Render 才會認為健康狀態正常
+    return jsonify({"message": "Hello, this is your chatbot API!"})
 
 line_bot_api = LineBotApi(LINE_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_SECRET)
