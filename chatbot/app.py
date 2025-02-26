@@ -11,6 +11,7 @@ LINE_ACCESS_TOKEN = "3GF9S76wI6xYh7+ucK4Ozd0nFDtUlq8EHNBBGxweukbVtouM7D4j9mKwG/R
 LINE_SECRET = "7feba977d46a33dd29b6915e540a4905"
 
 app = Flask(__name__)
+CORS(app)  # 允許所有跨域請求
 @app.route("/")
 def home():
     return "AI Recipe Chatbot is running!", 200  # 回應 200 OK，Render 才會認為健康狀態正常
