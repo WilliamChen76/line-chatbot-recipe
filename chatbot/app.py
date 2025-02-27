@@ -74,11 +74,22 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Generating your recipe, please wait..."))
 
     # 🔹 Dynamic prompt for AI
-    prompt = f"""You are a professional chef. Based on the following ingredients, create a healthy and delicious recipe. Include a title, ingredients list, and step-by-step cooking instructions.
+    # prompt = f"""You are a professional chef. Based on the following ingredients, create a healthy and delicious recipe. Include a title, ingredients list, and step-by-step cooking instructions.
 
-    Ingredients: {user_input}
+    # Ingredients: {user_input}
 
-    Make sure the recipe is easy to follow and provides a balanced meal."""
+    # Make sure the recipe is easy to follow and provides a balanced meal."""
+
+    # 🔹 Enhanced prompt (Handles ingredients, questions, and language detection)
+    prompt = f"""You are a professional chef and culinary expert. 
+    Your task is to assist users with cooking, recipes, ingredients, and nutrition. 
+    - If the user input consists **only of ingredients**, generate a healthy and delicious recipe with a title, ingredients list, and step-by-step cooking instructions. 
+    - If the user input is a **question about cooking or ingredients**, provide a clear and concise expert answer.
+    - Detect the language of the user's input. If possible, respond in the same language. If the language is unclear, default to English.
+
+    User input: {user_input}
+
+    Provide a helpful response accordingly."""
 
     # Send request to Hugging Face API
     llm_reply = query_huggingface(prompt)
