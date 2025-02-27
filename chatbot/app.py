@@ -68,19 +68,30 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    user_input = event.message.text  # 用戶輸入的食材
+    user_input = event.message.text  # User input ingredients
 
-    # 🔹 動態生成 Prompt，讓 AI 根據用戶提供的食材生成食譜
+    # 🔹 Send an initial response to let the user know processing has started
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Generating your recipe, please wait..."))
+
+    # 🔹 Dynamic prompt for AI
     prompt = f"""You are a professional chef. Based on the following ingredients, create a healthy and delicious recipe. Include a title, ingredients list, and step-by-step cooking instructions.
 
     Ingredients: {user_input}
 
     Make sure the recipe is easy to follow and provides a balanced meal."""
 
-    # 送入 Hugging Face API
+    # Send request to Hugging Face API
     llm_reply = query_huggingface(prompt)
 
-    # 回應用戶
+    # **Remove the prompt from AI response if included**
+    if prompt in llm_reply:
+        llm_reply = llm_reply.replace(prompt, "").strip()
+
+    # 🔹 Handle empty responses
+    if not llm_reply.strip():
+        llm_reply = "Sorry, I couldn't generate a recipe at the moment. Please try again later!"
+
+    # **Reply to the user**
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=llm_reply))
 
 if __name__ == "__main__":
