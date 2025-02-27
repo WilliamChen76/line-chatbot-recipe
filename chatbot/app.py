@@ -91,8 +91,12 @@ def handle_message(event):
     if not llm_reply.strip():
         llm_reply = "Sorry, I couldn't generate a recipe at the moment. Please try again later!"
 
-    # **Reply to the user**
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=llm_reply))
+    # **Ensure response is within LINE's limit (max 4000 characters)**
+    max_length = 4000
+    llm_reply = llm_reply[:max_length]
+
+    # **Use push_message() to send the response**
+    line_bot_api.push_message(event.source.user_id, TextSendMessage(text=llm_reply))
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # 讀取 Render 設定的 PORT
