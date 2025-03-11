@@ -63,8 +63,10 @@ import os
 from RAG import chat_with_model  # 匯入 RAG 的 chat_with_model
 
 # LINE 設定
-LINE_ACCESS_TOKEN = "3GF9S76wI6xYh7+ucK4Ozd0nFDtUlq8EHNBBGxweukbVtouM7D4j9mKwG/RfQ7dHwSQ5EadKDjyXwHNGiinh4mupLlNjCBfHiRS8WahnXMJUlTQ/rqOVim8BSjNcwuODm80i8pXpEHA9/p82ZYK6YwdB04t89/1O/w1cDnyilFU="
-LINE_SECRET = "7feba977d46a33dd29b6915e540a4905"
+# LINE_ACCESS_TOKEN = "3GF9S76wI6xYh7+ucK4Ozd0nFDtUlq8EHNBBGxweukbVtouM7D4j9mKwG/RfQ7dHwSQ5EadKDjyXwHNGiinh4mupLlNjCBfHiRS8WahnXMJUlTQ/rqOVim8BSjNcwuODm80i8pXpEHA9/p82ZYK6YwdB04t89/1O/w1cDnyilFU="
+# LINE_SECRET = "7feba977d46a33dd29b6915e540a4905"
+LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")
+LINE_SECRET = os.getenv("LINE_SECRET")
 
 app = Flask(__name__)
 CORS(app)
