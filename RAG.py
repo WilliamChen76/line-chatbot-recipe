@@ -36,6 +36,11 @@ if not firebase_cred_json:
 if not firebase_admin._apps:
     cred = credentials.Certificate(json.loads(firebase_cred_json))
     firebase_admin.initialize_app(cred)
+if not firebase_admin._apps:
+    cred = credentials.Certificate(firebase_cred_path)
+    firebase_admin.initialize_app(cred)
+if firebase_cred_json:
+    cred = credentials.Certificate(json.loads(firebase_cred_json))
 db = firestore.client()
 print("✅ Connected to Firebase Firestore!")
 
