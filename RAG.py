@@ -12,23 +12,29 @@ from firebase_admin import credentials, firestore
 # ----------------------------------------- 
 # 🔹 初始化全局變數
 # ----------------------------------------- 
-FIREBASE_CRED_PATH = "C:/Users/user/anaconda3/line-chatbot-recipe/chatbot/api1.env.txt"
-CSV_PATH = "C:/Users/user/anaconda3/line-chatbot-recipe/chatbot/RecipeNLG_dataset.csv"
+# FIREBASE_CRED_PATH = "C:/Users/user/anaconda3/line-chatbot-recipe/chatbot/api1.env.txt"
+# CSV_PATH = "C:/Users/user/anaconda3/line-chatbot-recipe/chatbot/RecipeNLG_dataset.csv"
+CSV_PATH = "RecipeNLG_dataset.csv"
 FAISS_INDEX_PATH = "recipe_faiss.index"
 METADATA_PATH = "recipe_metadata.csv"
 
 # Load environment variables
 load_dotenv(FIREBASE_CRED_PATH)
 openai_api_key = os.getenv("OPENAI_API_KEY")
-firebase_cred_path = "C:/Users/user/anaconda3/line-chatbot-recipe/chatbot/ai-recipe-87c0b-firebase-adminsdk-fbsvc-1abcfa88d1.json"
+# firebase_cred_path = "C:/Users/user/anaconda3/line-chatbot-recipe/chatbot/ai-recipe-87c0b-firebase-adminsdk-fbsvc-1abcfa88d1.json"
+firebase_cred_json = os.getenv("FIREBASE_CREDENTIALS")
 
 if not openai_api_key:
     raise ValueError("❌ OPENAI_API_KEY not found! Check your .env file.")
 
 # Initialize Firebase
-if not firebase_admin._apps:
-    cred = credentials.Certificate(firebase_cred_path)
-    firebase_admin.initialize_app(cred)
+# if not firebase_admin._apps:
+#     cred = credentials.Certificate(firebase_cred_path)
+#     firebase_admin.initialize_app(cred)
+if firebase_cred_json:
+    cred = credentials.Certificate(json.loads(firebase_cred_json))
+else:
+    raise ValueError("Firebase credentials not found in environment variables.")
 db = firestore.client()
 
 # Load embedding model
