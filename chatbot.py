@@ -68,6 +68,9 @@ from RAG import chat_with_model  # 匯入 RAG 的 chat_with_model
 LINE_ACCESS_TOKEN = os.getenv("LINE_ACCESS_TOKEN")
 LINE_SECRET = os.getenv("LINE_SECRET")
 
+if not LINE_ACCESS_TOKEN or not LINE_SECRET:
+    raise ValueError("❌ LINE_ACCESS_TOKEN or LINE_SECRET not found!")
+    
 app = Flask(__name__)
 CORS(app)
 
@@ -113,6 +116,7 @@ def handle_message(event):
         messages=[TextMessage(text=response_text)]
     )
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+# 移除 app.run，因為 gunicorn 會處理
+# if __name__ == "__main__":
+#     port = int(os.environ.get("PORT", 5000))
+#     app.run(host="0.0.0.0", port=port)
