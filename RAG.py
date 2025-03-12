@@ -8,7 +8,9 @@ import openai
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, firestore
+import gdown
 import json
+from dotenv import load_dotenv
 # ----------------------------------------- 
 # 🔹 初始化全局變數
 # ----------------------------------------- 
